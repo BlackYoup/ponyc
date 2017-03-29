@@ -76,8 +76,16 @@ bool expr_provides(pass_opt_t* opt, ast_t* ast)
 bool expr_param(pass_opt_t* opt, ast_t* ast)
 {
   AST_GET_CHILDREN(ast, id, type, init);
+  pony_assert(type != NULL);
   ast_settype(ast, type);
+  pony_assert(ast_type(ast) != NULL);
   bool ok = true;
+
+  if(ast_name(id) == stringtab("qty"))
+  {
+    printf("expr_param: %zu %p\n", ast_pos(ast), ast);
+    ast_print(ast);
+  }
 
   if(ast_id(init) != TK_NONE)
   {
@@ -422,7 +430,10 @@ bool expr_paramref(pass_opt_t* opt, ast_t* ast)
 
   ast_t* type = ast_type(def);
   if(ast_name(ast_child(def)) == stringtab("qty"))
+  {
+    printf("expr_paramref: %zu %p\n", ast_pos(def), def);
     ast_print(def);
+  }
 
   if(is_typecheck_error(type))
     return false;
