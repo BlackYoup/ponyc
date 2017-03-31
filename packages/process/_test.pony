@@ -121,11 +121,11 @@ class iso _TestNonExecutablePathResultsInExecveError is UnitTest
     h.complete(false)
 
   fun _setup_notifier(h: TestHelper, path: FilePath): ProcessNotify iso^ =>
-    recover object is ProcessNotify
+    object iso is ProcessNotify
       let _h: TestHelper = h
       let _path: FilePath = path
 
-     fun ref failed(process: ProcessMonitor ref, err: ProcessError) =>
+      fun ref failed(process: ProcessMonitor ref, err: ProcessError) =>
         match err
         | ExecveError => _h.complete(true)
         else
@@ -141,7 +141,7 @@ class iso _TestNonExecutablePathResultsInExecveError is UnitTest
 
       fun _cleanup() =>
         _path.remove()
-    end end
+    end
 
   fun _setup_file(h: TestHelper): FilePath ? =>
     let tmp_dir = FilePath(h.env.root as AmbientAuth, "/tmp/")
